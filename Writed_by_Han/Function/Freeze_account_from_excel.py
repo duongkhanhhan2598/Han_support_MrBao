@@ -33,8 +33,8 @@ def freeze_excel_list_account(req_obj):
                 # CALL API FREEZE LIST ACCOUNT
                 client = boto3.client(
                     'lambda',
-                    aws_access_key_id='AKIAT7N2UHY2K5ORFNRZ',
-                    aws_secret_access_key='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'
+                    aws_access_key_id='',
+                    aws_secret_access_key=''
                 )
                 lambda_arn = 'arn:aws:lambda:ap-southeast-1:273658691124:function:sop-SupportFunction-gwrkNSzcOhad'
                 invoke_type = 'RequestResponse'
