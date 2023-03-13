@@ -16,8 +16,8 @@ def lambda_handler(req_obj):
                 # Call API Get Customer Retail
                 url = 'https://apimgmt.ubank.vn/api/v1/fin/customer/retail'
                 bearer_token = 'Bearer ' + current_token
-                headers = { 'Authorization': bearer_token }
-                params = { 'phoneNo': phone }
+                headers = {'Authorization': bearer_token}
+                params = {'phoneNo': phone }
                 resp_customer_retail = requests.request('GET', url, headers=headers, params=params)
                 json_resp_cif_id = json.loads(resp_customer_retail.text)
                 cif_id =  json_resp_cif_id.get('data', {}).get('data', {}).get('cifId', '')
