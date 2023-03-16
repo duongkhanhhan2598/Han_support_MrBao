@@ -33,8 +33,8 @@ def lambda_handler(req_obj):
                     },
                     ExpressionAttributeValues={
                         ':val1': ward,
-                        ':val1': district,
-                        ':val1': province
+                        ':val2': district,
+                        ':val3': province
                     },
                 )
                 print('--> UPDATE SUCCESS ========> ', resp_update)
