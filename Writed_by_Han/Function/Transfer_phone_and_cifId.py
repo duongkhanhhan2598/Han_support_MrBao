@@ -21,7 +21,8 @@ def transfer_phone_and_cifId(req_obj):
             params = {'phoneNo': phone}
             resp_of_phone = requests.request('GET', url, headers=headers, params=params)
             json_resp_of_phone = json.loads(resp_of_phone.text)
-            cif_id_resp = json_resp_of_phone.get('data', {}).get('data', {}).get('cifId', '')
+            data_resp_of_phone = json_resp_of_phone.get('data', {}).get('data', {})
+            cif_id_resp = data_resp_of_phone.get('cifId', '')
             phone_cif_id = {
                 'phone': phone,
                 'cifId': cif_id_resp
@@ -32,7 +33,8 @@ def transfer_phone_and_cifId(req_obj):
             params = {'cifId': cif_id}
             resp_of_cif_id = requests.request('GET', url, headers=headers, params=params)
             json_resp_of_cif_id = json.loads(resp_of_cif_id.text)
-            phone_resp = json_resp_of_cif_id.get('data', {}).get('data', {}).get('customerInqRs', {}).get('phoneNo', '')
+            data_resp_of_cif_id = json_resp_of_cif_id.get('data', {}).get('data', {})
+            phone_resp = data_resp_of_cif_id.get('customerInqRs', {}).get('phoneNo', '')
             phone_cif_id = {
                 'phone': phone_resp,
                 'cifId': cif_id
