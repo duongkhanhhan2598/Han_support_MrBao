@@ -33,6 +33,14 @@ def get_role(user_name):
         return 'CS'
 
 
+# SET DATE
+def get_current_date(format):
+    zoneVN = dateutil.tz.gettz('Asia/Bangkok')
+    now_dt = datetime.now(zoneVN)
+    current_date = now_dt.strftime(format)
+    return str(current_date)
+
+
 # Export "Activity log" to file Excel
 def export_activity_log(req_obj):
     hits = req_obj.get('hits', [])
@@ -152,20 +160,79 @@ def export_activity_log(req_obj):
             df_sheet_3 = df_sheet_3.sort_values(by=['User Name', 'Date Request', 'Time Request'], ascending=False)
             df_sheet_3.reset_index(drop=True, inplace=True)
             df_sheet_3.index += 1
-        zoneVN = dateutil.tz.gettz('Asia/Bangkok')
-        now_dt = datetime.now(zoneVN)
-        current_date = now_dt.strftime('%d-%m-%Y')
-        file_name = 'Admin_check_log_' + current_date + '.xlsx'
+
+        file_name = 'Admin_check_log_' + get_current_date('%d-%m-%Y') + '.xlsx'
         with pd.ExcelWriter(file_name) as writer:
             df_sheet_1.to_excel(writer, sheet_name=sheet_name_1, index=True, index_label='No.', header=True, freeze_panes=(1, 1))
             df_sheet_2.to_excel(writer, sheet_name=sheet_name_2, index=True, index_label='No.', header=True, freeze_panes=(1, 1))
             df_sheet_3.to_excel(writer, sheet_name=sheet_name_3, index=True, index_label='No.', header=True, freeze_panes=(1, 1))
+
     except Exception as e:
         print('FAIL TO EXPORT EXCEL FILE', e)
+# # RUN FROM HERE
+# file = open('response.json')
+# data = json.load(file)
+# data_in = data.get('hits', {})
+# export_activity_log(data_in)
 
 
+def export_customer_activity_log(req_obj):
+    hits = req_obj.get('hits', [])
+    try:
+        data_excel = []
+        for item in hits:
+            source = item.get('_source', {})
+
+            user_name = source.get('username', '')
+            user_role = get_role(user_name)
+            action_name = source.get('type', '')
+            date_request = source.get('datetime', '').split()[0] if source.get('datetime', '') else ''
+            time_request = source.get('datetime', '').split()[1] if source.get('datetime', '') else ''
+            data = source.get('data', {})
+            from_date = data.get('fromDate', '')
+            to_date = data.get('toDate', '')
+            export_from_date = data.get('date_from', '')
+            export_to_date = data.get('date_to', '')
+            cif_id = source.get('cifId', '')
+            field_edit = list(source.get('data', {}).keys()) if source.get('data', {}).keys() else ''
+            field_edit_beauty = str(field_edit).replace('[', '').replace(']', '')
+            old_data = source.get('oldData', {})
+            old_data_beauty = str([*old_data.values()]).replace('[', '').replace(']', '')
+            new_data_beauty = str([*data.values()]).replace('[', '').replace(']', '')
+
+            # SHEET 1 : Export data
+            row_excel = {
+                'User Role': user_role,
+                'User Name': user_name,
+                'Date Request': date_request,
+                'Time Request': time_request,
+                'Action Name': action_name,
+                'CIF': cif_id,
+                'Customer Name': '',
+                'Field Edit': field_edit_beauty,
+                'Old Data': old_data_beauty,
+                'New Data': new_data_beauty,
+                'From Date': from_date or export_from_date,
+                'To Date': to_date or export_to_date,
+
+            }
+            data_excel.append(row_excel)
+
+        df_excel = pd.DataFrame(data_excel)
+        if not df_excel.empty:
+            df_excel = df_excel.sort_values(by=['User Name', 'Date Request', 'Time Request'], ascending=False)
+            df_excel.reset_index(drop=True, inplace=True)
+            df_excel.index += 1
+
+        file_name = 'Customer_activity_log_' + get_current_date('%d-%m-%Y') + '.xlsx'
+        sheet_name = 'Cus-Activity log'
+        with pd.ExcelWriter(file_name) as writer:
+            df_excel.to_excel(writer, sheet_name=sheet_name, index=True, index_label='No.', header=True, freeze_panes=(1, 1))
+
+    except Exception as e:
+        print('FAIL TO EXPORT EXCEL FILE', e)
 # RUN FROM HERE
 file = open('response.json')
 data = json.load(file)
 data_in = data.get('hits', {})
-export_activity_log(data_in)
+export_customer_activity_log(data_in)
