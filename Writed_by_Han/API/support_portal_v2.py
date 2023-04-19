@@ -109,7 +109,7 @@ def get_balance(globals_variable, req_obj):
             'statusCode': 500,
             'message': 'Internal Server Error'
         }
-
+get_balance(globals_variable, req_obj)
 
 def get_term_deposit(globals_variable, req_obj):
     cif_id = req_obj.get('cifId', '')
@@ -301,7 +301,7 @@ def get_transaction(globals_variable, req_obj):
             'statusCode': 500,
             'message': 'Internal Server Error'
         }
-
+get_transaction(globals_variable, req_obj)
 
 def get_card_info(globals_variable, req_obj):
     cif_id = req_obj.get('cifId', '')

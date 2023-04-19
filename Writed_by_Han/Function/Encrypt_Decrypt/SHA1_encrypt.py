@@ -24,7 +24,7 @@ def encrypt_SHA1():
     print("trans_id ====", trans_id)
     print('trans_date====', trans_date)
     print('content', content)
-    print('check sum ======>',check_sum)
+    print('check sum ======>', check_sum)
     # CALL API for checking
     url = 'https://stream.uat.tutuka.cloud/json'
     params = {
