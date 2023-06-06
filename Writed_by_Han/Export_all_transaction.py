@@ -503,6 +503,7 @@ def export_csv_all_transaction(req_obj, globals_variable):
         # EXPORT TO CSV
         file_name = 'Transaction_{}.csv'.format(platform)
         df = pd.DataFrame(all_tran_filter)
+        df = df.sort_values(by=['Create At'], ascending=False)
         df.reset_index(drop=True, inplace=True)
         df.index += 1
         df.index.name = '#'
@@ -528,3 +529,25 @@ def export_csv_all_transaction(req_obj, globals_variable):
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# CALL API
+req_obj = {
+    'cifId': '',
+    'platform': 'InternalUbank',
+    'datetimeFrom': '2023-02-24 00:00:00',
+    'datetimeTo': '2023-05-30 23:59:59'
+}
+export_csv_all_transaction(req_obj, globals_variable)
