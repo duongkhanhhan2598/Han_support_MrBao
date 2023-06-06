@@ -403,7 +403,7 @@ def export_csv_all_transaction(req_obj, globals_variable):
                     elif part_tran_temp in NAPAS:
                         if part_tran_temp == 'TOUP01':
                             platform_temp = 'Napas ECOM'
-                        elif part_tran_temp == 'TOUP01' and tran_type_temp == 'C':
+                        elif part_tran_temp == 'TOUP03' and tran_type_temp == 'C':
                             platform_temp = 'Napas ECOM'
                         platform_temp = 'Napas IPFT'
                     elif part_tran_temp in PAYOO:
